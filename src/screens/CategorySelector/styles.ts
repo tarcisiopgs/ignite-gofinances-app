@@ -1,15 +1,19 @@
 import {getBottomSpace, getStatusBarHeight} from 'react-native-iphone-x-helper';
-import {RFValue} from 'react-native-responsive-fontsize';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {FlatList, TouchableOpacityProps} from 'react-native';
+import {RFValue} from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 import {Feather} from '@expo/vector-icons';
-import {FlatList} from 'react-native';
 
 interface CategoryProps {
   color: string;
   name: string;
   icon: string;
   key: string;
+}
+
+interface CategoryItemProps extends TouchableOpacityProps {
+  selected: boolean;
 }
 
 export const Container = styled(GestureHandlerRootView).attrs({})`
@@ -34,7 +38,11 @@ export const Title = styled.Text.attrs({})`
   font-size: ${RFValue(18)}px;
 `;
 
-export const CategoryItem = styled.View.attrs({})`
+export const CategoryItem = styled.TouchableOpacity.attrs(
+  {},
+)<CategoryItemProps>`
+  background-color: ${({theme, selected}) =>
+    selected ? theme.colors.secondaryLight : theme.colors.background};
   padding: ${RFValue(15)}px;
   flex-direction: row;
   align-items: center;

@@ -24,20 +24,22 @@ interface CategoryProps {
 
 interface CategorySelectorProps {
   handleChangeCategory: (value: CategoryProps) => void;
+  categorySelected: CategoryProps;
   handleToggleModal: () => void;
-  category: string;
 }
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({
   handleChangeCategory,
   handleToggleModal,
-  category,
+  categorySelected,
 }) => {
   const getCategoryItemKey = (item: CategoryProps, index: number) =>
     String(index);
 
   const renderCategoryItem = ({item}: {item: CategoryProps}) => (
-    <CategoryItem>
+    <CategoryItem
+      selected={categorySelected.key === item.key}
+      onPress={() => handleChangeCategory(item)}>
       <CategoryIcon name={item.icon} />
       <CategoryName>{item.name}</CategoryName>
     </CategoryItem>

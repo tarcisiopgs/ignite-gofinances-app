@@ -1,7 +1,14 @@
 import React, {useState, useCallback} from 'react';
-import {Modal} from 'react-native';
+import {Modal, TouchableWithoutFeedback, Keyboard, Alert} from 'react-native';
+import {useForm} from 'react-hook-form';
 
 import CategorySelector from '../CategorySelector';
+import {
+  TransactionTypeButton,
+  CategorySelect,
+  InputForm,
+  Button,
+} from '../../components';
 import {
   TransactionTypeButtonsWrapper,
   Container,
@@ -10,18 +17,17 @@ import {
   Title,
   Form,
 } from './styles';
-import {
-  TransactionTypeButton,
-  CategorySelect,
-  Button,
-  Input,
-} from '../../components';
 
 interface CategoryProps {
   color: string;
   name: string;
   icon: string;
   key: string;
+}
+
+interface FormData {
+  amount: string;
+  name: string;
 }
 
 const Register: React.FC = () => {
@@ -35,6 +41,29 @@ const Register: React.FC = () => {
     key: 'category',
     icon: 'any',
   });
+  const {control, handleSubmit} = useForm();
+
+  const handleRegister = useCallback(
+    (form: FormData) => {
+      if (!transactionTypeSelected) {
+        return Alert.alert('Selecione o tipo da transação');
+      }
+
+      if (categorySelected.key === 'category') {
+        return Alert.alert('Selecione a categoria da transação');
+      }
+
+      const data = {
+        transactionType: transactionTypeSelected,
+        category: categorySelected.key,
+        amount: form.amount,
+        name: form.name,
+      };
+
+      console.log(data);
+    },
+    [transactionTypeSelected, categorySelected],
+  );
 
   const handleChangeTransactionTypeSelected = useCallback(
     (value: 'income' | 'outcome') => setTransactionTypeSelected(value),
@@ -52,41 +81,57 @@ const Register: React.FC = () => {
   );
 
   return (
-    <Container>
-      <Header>
-        <Title>Cadastro</Title>
-      </Header>
-      <Content>
-        <Form>
-          <Input placeholder="Nome" />
-          <Input placeholder="Preço" />
-          <TransactionTypeButtonsWrapper>
-            <TransactionTypeButton
-              onPress={() => handleChangeTransactionTypeSelected('income')}
-              selected={transactionTypeSelected === 'income'}
-              title="Income"
-              type="income"
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <Container>
+        <Header>
+          <Title>Cadastro</Title>
+        </Header>
+        <Content>
+          <Form>
+            <InputForm
+              autoCapitalize="sentences"
+              autoCorrect={false}
+              placeholder="Nome"
+              control={control}
+              name="name"
             />
-            <TransactionTypeButton
-              withoutMarginRight
-              onPress={() => handleChangeTransactionTypeSelected('outcome')}
-              selected={transactionTypeSelected === 'outcome'}
-              title="Outcome"
-              type="outcome"
+            <InputForm
+              keyboardType="numeric"
+              placeholder="Preço"
+              control={control}
+              name="amount"
             />
-          </TransactionTypeButtonsWrapper>
-          <CategorySelect onPress={handleToggleModal} title="Categoria" />
-        </Form>
-        <Button title="Enviar" />
-      </Content>
-      <Modal statusBarTranslucent visible={modalOpened}>
-        <CategorySelector
-          handleChangeCategory={handleChangeCategory}
-          handleToggleModal={handleToggleModal}
-          category=""
-        />
-      </Modal>
-    </Container>
+            <TransactionTypeButtonsWrapper>
+              <TransactionTypeButton
+                onPress={() => handleChangeTransactionTypeSelected('income')}
+                selected={transactionTypeSelected === 'income'}
+                title="Income"
+                type="income"
+              />
+              <TransactionTypeButton
+                withoutMarginRight
+                onPress={() => handleChangeTransactionTypeSelected('outcome')}
+                selected={transactionTypeSelected === 'outcome'}
+                title="Outcome"
+                type="outcome"
+              />
+            </TransactionTypeButtonsWrapper>
+            <CategorySelect
+              title={categorySelected.name}
+              onPress={handleToggleModal}
+            />
+          </Form>
+          <Button title="Enviar" onPress={handleSubmit(handleRegister)} />
+        </Content>
+        <Modal animationType="slide" statusBarTranslucent visible={modalOpened}>
+          <CategorySelector
+            handleChangeCategory={handleChangeCategory}
+            handleToggleModal={handleToggleModal}
+            categorySelected={categorySelected}
+          />
+        </Modal>
+      </Container>
+    </TouchableWithoutFeedback>
   );
 };
 
