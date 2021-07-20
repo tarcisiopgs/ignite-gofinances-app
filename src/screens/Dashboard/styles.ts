@@ -1,11 +1,25 @@
-import {RFPercentage, RFValue} from 'react-native-responsive-fontsize';
-import {getStatusBarHeight} from 'react-native-iphone-x-helper';
+import {getStatusBarHeight, getBottomSpace} from 'react-native-iphone-x-helper';
+import {RFValue} from 'react-native-responsive-fontsize';
+import {TextProps, FlatList} from 'react-native';
 import styled from 'styled-components/native';
 import {Feather} from '@expo/vector-icons';
-import {TextProps} from 'react-native';
 
 interface UserTextProps extends TextProps {
   bold?: boolean;
+}
+
+interface CategoryProps {
+  icon: string;
+  name: string;
+}
+
+interface TransactionData {
+  category: CategoryProps;
+  amount: string;
+  title: string;
+  type: string;
+  date: string;
+  id: string;
 }
 
 export const Container = styled.View.attrs({})`
@@ -71,7 +85,10 @@ export const TransactionsTitle = styled.Text.attrs({})`
   font-size: ${RFValue(18)}px;
 `;
 
-export const TransactionsList = styled.FlatList.attrs({
+export const TransactionsList = styled(
+  FlatList as new () => FlatList<TransactionData>,
+).attrs({
+  contentContainerStyle: {paddingBottom: getBottomSpace() + RFValue(24)},
   showsVerticalScrollIndicator: false,
 })``;
 

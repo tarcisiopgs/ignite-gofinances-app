@@ -8,7 +8,7 @@ import {
   useFonts,
 } from '@expo-google-fonts/poppins';
 
-import {Dashboard} from './src/screens';
+import {Dashboard, Register, CategorySelector} from './src/screens';
 import {theme} from './src/global';
 
 export default function App() {
@@ -23,7 +23,7 @@ export default function App() {
   } else {
     return (
       <ThemeProvider theme={theme}>
-        <Dashboard />
+        <Register />
       </ThemeProvider>
     );
   }

@@ -17,11 +17,12 @@ interface CategoryProps {
 }
 
 interface TransactionData {
-  type: string;
   category: CategoryProps;
   amount: string;
   title: string;
   date: string;
+  type: string;
+  id: string;
 }
 
 interface TransactionCardProps {

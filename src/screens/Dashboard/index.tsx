@@ -16,9 +16,24 @@ import {
   Header,
 } from './styles';
 
+interface CategoryProps {
+  icon: string;
+  name: string;
+}
+
+interface TransactionData {
+  category: CategoryProps;
+  amount: string;
+  title: string;
+  type: string;
+  date: string;
+  id: string;
+}
+
 const Dashboard: React.FC = () => {
-  const data = [
+  const data: TransactionData[] = [
     {
+      id: '1',
       category: {name: 'Vendas', icon: 'dollar-sign'},
       title: 'Desenvolvimento de site',
       amount: 'R$ 12.000,00',
@@ -26,6 +41,7 @@ const Dashboard: React.FC = () => {
       type: 'income',
     },
     {
+      id: '2',
       category: {name: 'Alimentação', icon: 'coffee'},
       title: 'Hamburgueria Pizzy',
       amount: '- R$ 59,00',
@@ -34,9 +50,10 @@ const Dashboard: React.FC = () => {
     },
   ];
 
-  const getTransactionCardKey = (item: any, index: number) => String(index);
+  const getTransactionCardKey = (item: TransactionData, index: number) =>
+    String(index);
 
-  const renderTransactionCard = ({item}: any) => (
+  const renderTransactionCard = ({item}: {item: TransactionData}) => (
     <TransactionCard data={item} />
   );
 
