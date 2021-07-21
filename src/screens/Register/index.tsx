@@ -1,6 +1,8 @@
 import React, {useState, useCallback} from 'react';
 import {Modal, TouchableWithoutFeedback, Keyboard, Alert} from 'react-native';
+import {yupResolver} from '@hookform/resolvers/yup';
 import {useForm} from 'react-hook-form';
+import * as yup from 'yup';
 
 import CategorySelector from '../CategorySelector';
 import {
@@ -30,6 +32,15 @@ interface FormData {
   name: string;
 }
 
+const schema = yup.object().shape({
+  amount: yup
+    .number()
+    .typeError('Informe um valor numérico')
+    .positive('O valor não pode ser negativo')
+    .required('Preço é obrigatório'),
+  name: yup.string().required('Nome é obrigatório'),
+});
+
 const Register: React.FC = () => {
   const [transactionTypeSelected, setTransactionTypeSelected] = useState<
     'income' | 'outcome' | ''
@@ -41,7 +52,11 @@ const Register: React.FC = () => {
     key: 'category',
     icon: 'any',
   });
-  const {control, handleSubmit} = useForm();
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm({resolver: yupResolver(schema)});
 
   const handleRegister = useCallback(
     (form: FormData) => {
@@ -89,6 +104,7 @@ const Register: React.FC = () => {
         <Content>
           <Form>
             <InputForm
+              error={errors.name && errors.name.message}
               autoCapitalize="sentences"
               autoCorrect={false}
               placeholder="Nome"
@@ -96,6 +112,7 @@ const Register: React.FC = () => {
               name="name"
             />
             <InputForm
+              error={errors.amount && errors.amount.message}
               keyboardType="numeric"
               placeholder="Preço"
               control={control}
