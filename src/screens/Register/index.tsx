@@ -1,7 +1,10 @@
-import React, {useState, useCallback} from 'react';
 import {Modal, TouchableWithoutFeedback, Keyboard, Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 import {yupResolver} from '@hookform/resolvers/yup';
+import React, {useState, useCallback} from 'react';
 import {useForm} from 'react-hook-form';
+import uuid from 'react-native-uuid';
 import * as yup from 'yup';
 
 import CategorySelector from '../CategorySelector';
@@ -41,25 +44,29 @@ const schema = yup.object().shape({
   name: yup.string().required('Nome é obrigatório'),
 });
 
+const storageKey = '@gofinances:transactions';
+
 const Register: React.FC = () => {
   const [transactionTypeSelected, setTransactionTypeSelected] = useState<
     'income' | 'outcome' | ''
   >('');
-  const [modalOpened, setModalOpened] = useState<boolean>(false);
   const [categorySelected, setCategorySelected] = useState<CategoryProps>({
     color: 'transparent',
     name: 'Categoria',
     key: 'category',
     icon: 'any',
   });
+  const [modalOpened, setModalOpened] = useState<boolean>(false);
   const {
-    control,
-    handleSubmit,
     formState: {errors},
+    handleSubmit,
+    control,
+    reset,
   } = useForm({resolver: yupResolver(schema)});
+  const navigation = useNavigation();
 
   const handleRegister = useCallback(
-    (form: FormData) => {
+    async (form: FormData) => {
       if (!transactionTypeSelected) {
         return Alert.alert('Selecione o tipo da transação');
       }
@@ -71,13 +78,40 @@ const Register: React.FC = () => {
       const data = {
         transactionType: transactionTypeSelected,
         category: categorySelected.key,
+        id: String(uuid.v4()),
         amount: form.amount,
+        date: new Date(),
         name: form.name,
       };
 
-      console.log(data);
+      try {
+        const currentData = await AsyncStorage.getItem(storageKey);
+        const currentDataFormatted: any[] = currentData
+          ? JSON.parse(currentData)
+          : [];
+
+        await AsyncStorage.setItem(
+          storageKey,
+          JSON.stringify([...currentDataFormatted, data]),
+        );
+
+        setTransactionTypeSelected('');
+        setCategorySelected({
+          color: 'transparent',
+          name: 'Categoria',
+          key: 'category',
+          icon: 'any',
+        });
+        reset();
+
+        return navigation.navigate('Dashboard');
+      } catch (e) {
+        console.log(e);
+
+        return Alert.alert('Não foi possível registrar a sua transação');
+      }
     },
-    [transactionTypeSelected, categorySelected],
+    [transactionTypeSelected, categorySelected, navigation],
   );
 
   const handleChangeTransactionTypeSelected = useCallback(

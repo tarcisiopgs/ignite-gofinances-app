@@ -1,29 +1,39 @@
+import {RectButton, RectButtonProps} from 'react-native-gesture-handler';
 import {RFValue} from 'react-native-responsive-fontsize';
 import styled, {css} from 'styled-components/native';
-import {TouchableOpacity, TouchableOpacityProps} from 'react-native';
 import {Feather} from '@expo/vector-icons';
+import {ViewProps} from 'react-native';
 
 interface IconProps {
   type: 'income' | 'outcome';
 }
 
-interface ContainerProps extends TouchableOpacityProps {
+interface ButtonProps extends RectButtonProps {
   withoutMarginRight?: boolean;
   type: 'income' | 'outcome';
   selected: boolean;
 }
 
-export const Container = styled(TouchableOpacity).attrs({})<ContainerProps>`
+interface ContainerProps extends ViewProps {
+  withoutMarginRight?: boolean;
+  selected: boolean;
+}
+
+export const Container = styled.View.attrs({})<ContainerProps>`
   margin: 0 ${({withoutMarginRight}) => (withoutMarginRight ? 0 : RFValue(8))}px
     0 0;
   border-color: ${({theme, selected}) =>
     selected ? 'transparent' : theme.colors.textLight};
   border-width: ${RFValue(1.5)}px;
   border-radius: ${RFValue(5)}px;
+  flex: 1;
+`;
+
+export const Button = styled(RectButton).attrs({})<ButtonProps>`
+  border-radius: ${RFValue(5)}px;
   padding: ${RFValue(18)}px 0;
   justify-content: center;
   flex-direction: row;
-  flex: 1;
 
   ${({selected, type}) =>
     type === 'income' &&

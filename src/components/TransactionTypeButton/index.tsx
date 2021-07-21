@@ -1,9 +1,9 @@
+import {RectButtonProps} from 'react-native-gesture-handler';
 import React from 'react';
-import {TouchableOpacityProps} from 'react-native';
 
-import {Container, Title, Icon} from './styles';
+import {Container, Button, Title, Icon} from './styles';
 
-interface TransactionTypeButtonProps extends TouchableOpacityProps {
+interface TransactionTypeButtonProps extends RectButtonProps {
   withoutMarginRight?: boolean;
   type: 'income' | 'outcome';
   selected: boolean;
@@ -23,13 +23,11 @@ const TransactionTypeButton: React.FC<TransactionTypeButtonProps> = ({
   ...rest
 }) => {
   return (
-    <Container
-      withoutMarginRight={withoutMarginRight}
-      selected={selected}
-      type={type}
-      {...rest}>
-      <Icon name={icon[type]} type={type} />
-      <Title>{title}</Title>
+    <Container selected={selected} withoutMarginRight={withoutMarginRight}>
+      <Button selected={selected} type={type} {...rest}>
+        <Icon name={icon[type]} type={type} />
+        <Title>{title}</Title>
+      </Button>
     </Container>
   );
 };

@@ -1,4 +1,5 @@
 import {getStatusBarHeight, getBottomSpace} from 'react-native-iphone-x-helper';
+import {BorderlessButton} from 'react-native-gesture-handler';
 import {RFValue} from 'react-native-responsive-fontsize';
 import {TextProps, FlatList} from 'react-native';
 import styled from 'styled-components/native';
@@ -92,8 +93,16 @@ export const TransactionsList = styled(
   showsVerticalScrollIndicator: false,
 })``;
 
+export const LogoutButton = styled(BorderlessButton).attrs({})``;
+
 export const LogoutIcon = styled(Feather).attrs(({theme}) => ({
   color: theme.colors.secondary,
   size: RFValue(24),
   name: 'power',
 }))``;
+
+export const LoadingContainer = styled.View.attrs({})`
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+`;

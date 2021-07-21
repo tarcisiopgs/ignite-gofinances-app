@@ -1,6 +1,6 @@
-import React from 'react';
-import {TextInputProps} from 'react-native';
 import {useTheme} from 'styled-components/native';
+import {TextInputProps} from 'react-native';
+import React from 'react';
 
 import {Container} from './styles';
 
