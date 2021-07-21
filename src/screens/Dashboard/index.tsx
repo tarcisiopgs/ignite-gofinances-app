@@ -79,27 +79,6 @@ const Dashboard: React.FC = () => {
     try {
       const currentData = await AsyncStorage.getItem(storageKey);
       const currentDataFormatted = currentData ? JSON.parse(currentData) : [];
-      const finalData = lodash.map(currentDataFormatted, (item: any) => {
-        const amountFormatted = currency(item.amount, {
-          decimal: ',',
-        }).format({symbol: 'R$ '});
-        const dateFormatted = format(parseISO(item.date), 'dd/MM/yy');
-        const categoryFormatted = categories.find(
-          (innerItem) => innerItem.key === item.category,
-        );
-
-        return {
-          ...item,
-          type: item.transactionType,
-          amount:
-            item.transactionType === 'outcome'
-              ? `-${amountFormatted}`
-              : amountFormatted,
-          category: categoryFormatted,
-          date: dateFormatted,
-          title: item.name,
-        };
-      });
       const finalIncomeHighlightData = lodash.filter(
         currentDataFormatted,
         (item) => item.transactionType === 'income',
@@ -109,45 +88,94 @@ const Dashboard: React.FC = () => {
         (item) => item.transactionType === 'outcome',
       );
 
-      setIncomeHighlightData({
-        amount: currency(lodash.sumBy(finalIncomeHighlightData, 'amount'), {
-          decimal: ',',
-        }).format({symbol: 'R$ '}),
-        details: `Última entrada dia ${format(
-          parseISO(lodash.maxBy(finalIncomeHighlightData, 'date').date),
-          "dd 'de' MMMM",
-          {locale},
-        )}`,
+      setIncomeHighlightData(() => {
+        const lastTransaction = lodash.maxBy(finalIncomeHighlightData, 'date');
+        const amountFormatted = currency(
+          lodash.sumBy(finalIncomeHighlightData, 'amount'),
+          {
+            decimal: ',',
+          },
+        ).format({symbol: 'R$ '});
+
+        return {
+          amount: amountFormatted,
+          details: `Última entrada dia ${format(
+            parseISO(lastTransaction.date),
+            "dd 'de' MMMM",
+            {locale},
+          )}`,
+        };
       });
-      setOutcomeHighlightData({
-        amount: currency(lodash.sumBy(finalOutcomeHighlightData, 'amount'), {
-          decimal: ',',
-        }).format({symbol: 'R$ '}),
-        details: `Última saída dia ${format(
-          parseISO(lodash.maxBy(finalOutcomeHighlightData, 'date').date),
-          "dd 'de' MMMM",
-          {locale},
-        )}`,
+
+      setOutcomeHighlightData(() => {
+        const lastTransaction = lodash.maxBy(finalOutcomeHighlightData, 'date');
+        const amountFormatted = currency(
+          lodash.sumBy(finalOutcomeHighlightData, 'amount'),
+          {
+            decimal: ',',
+          },
+        ).format({symbol: 'R$ '});
+
+        return {
+          amount: amountFormatted,
+          details: `Última saída dia ${format(
+            parseISO(lastTransaction.date),
+            "dd 'de' MMMM",
+            {locale},
+          )}`,
+        };
       });
-      setTotalHighlightData({
-        amount: currency(
+
+      setTotalHighlightData(() => {
+        const amountFormatted = currency(
           lodash.sumBy(finalIncomeHighlightData, 'amount') -
             lodash.sumBy(finalOutcomeHighlightData, 'amount'),
           {
             decimal: ',',
           },
-        ).format({symbol: 'R$ '}),
-        details: `De ${format(
-          parseISO(lodash.minBy(currentDataFormatted, 'date').date),
-          "dd 'de' MMMM",
-          {locale},
-        )} à ${format(
-          parseISO(lodash.maxBy(currentDataFormatted, 'date').date),
-          "dd 'de' MMMM",
-          {locale},
-        )}`,
+        ).format({symbol: 'R$ '});
+        const firstTransaction: any = lodash.minBy(
+          currentDataFormatted,
+          'date',
+        );
+        const lastTransaction: any = lodash.maxBy(currentDataFormatted, 'date');
+
+        return {
+          amount: amountFormatted,
+          details: `De ${format(
+            parseISO(firstTransaction.date),
+            "dd 'de' MMMM",
+            {locale},
+          )} à ${format(parseISO(lastTransaction.date), "dd 'de' MMMM", {
+            locale,
+          })}`,
+        };
       });
-      setData(finalData);
+
+      setData(
+        lodash.map(currentDataFormatted, (item: any) => {
+          const amountFormatted = currency(item.amount, {
+            decimal: ',',
+          }).format({symbol: 'R$ '});
+          const dateFormatted = format(parseISO(item.date), 'dd/MM/yy');
+          const categoryFormatted = categories.find(
+            (innerItem) => innerItem.key === item.category,
+          );
+
+          return {
+            ...item,
+            type: item.transactionType,
+            amount:
+              item.transactionType === 'outcome'
+                ? `-${amountFormatted}`
+                : amountFormatted,
+            category: categoryFormatted,
+            date: dateFormatted,
+            title: item.name,
+          };
+        }),
+      );
+
       setInitialLoading(false);
     } catch (e) {
       console.log(e);
