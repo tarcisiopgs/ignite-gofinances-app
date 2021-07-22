@@ -3,6 +3,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {useFocusEffect} from '@react-navigation/native';
 import {Alert, ActivityIndicator} from 'react-native';
 import locale from 'date-fns/locale/pt-BR';
+import {useTheme} from 'styled-components';
 import {format, parseISO} from 'date-fns';
 import currency from 'currency.js';
 import lodash from 'lodash';
@@ -25,7 +26,6 @@ import {
   UserText,
   Header,
 } from './styles';
-import {useTheme} from 'styled-components';
 
 interface CategoryProps {
   icon: string;
@@ -189,10 +189,6 @@ const Dashboard: React.FC = () => {
       loadTransactions();
     }, []),
   );
-
-  useEffect(() => {
-    loadTransactions();
-  }, []);
 
   return (
     <Container>
