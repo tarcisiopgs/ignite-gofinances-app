@@ -10,6 +10,7 @@ import lodash from 'lodash';
 
 import {HighlightCard, TransactionCard} from '../../components';
 import {categories} from '../../utils';
+import {useAuth} from '../../hooks';
 import {
   TransactionsWrapper,
   TransactionsTitle,
@@ -46,8 +47,6 @@ interface HighlightData {
   amount: string;
 }
 
-const storageKey = '@gofinances:transactions';
-
 const Dashboard: React.FC = () => {
   const [incomeHighlightData, setIncomeHighlightData] = useState<HighlightData>(
     {
@@ -66,7 +65,18 @@ const Dashboard: React.FC = () => {
       details: '',
     });
   const [data, setData] = useState<TransactionData[]>([]);
+  const {user, signOut} = useAuth();
   const theme = useTheme();
+
+  const handleSignOut = useCallback(async () => {
+    try {
+      await signOut();
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Não foi possível deslogar da aplicação');
+    }
+  }, [signOut]);
 
   const getTransactionCardKey = (item: TransactionData, index: number) =>
     String(index);
@@ -77,6 +87,7 @@ const Dashboard: React.FC = () => {
 
   const loadTransactions = async () => {
     try {
+      const storageKey = `@gofinances:transactions_user:${user?.id}`;
       const currentData = await AsyncStorage.getItem(storageKey);
       const currentDataFormatted = currentData ? JSON.parse(currentData) : [];
       const finalIncomeHighlightData = lodash.filter(
@@ -99,11 +110,13 @@ const Dashboard: React.FC = () => {
 
         return {
           amount: amountFormatted,
-          details: `Última entrada dia ${format(
-            parseISO(lastTransaction.date),
-            "dd 'de' MMMM",
-            {locale},
-          )}`,
+          details: lastTransaction
+            ? `Última entrada dia ${format(
+                parseISO(lastTransaction.date),
+                "dd 'de' MMMM",
+                {locale},
+              )}`
+            : 'Não há transações',
         };
       });
 
@@ -118,11 +131,13 @@ const Dashboard: React.FC = () => {
 
         return {
           amount: amountFormatted,
-          details: `Última saída dia ${format(
-            parseISO(lastTransaction.date),
-            "dd 'de' MMMM",
-            {locale},
-          )}`,
+          details: lastTransaction
+            ? `Última saída dia ${format(
+                parseISO(lastTransaction.date),
+                "dd 'de' MMMM",
+                {locale},
+              )}`
+            : 'Não há transações',
         };
       });
 
@@ -142,13 +157,14 @@ const Dashboard: React.FC = () => {
 
         return {
           amount: amountFormatted,
-          details: `De ${format(
-            parseISO(firstTransaction.date),
-            "dd 'de' MMMM",
-            {locale},
-          )} à ${format(parseISO(lastTransaction.date), "dd 'de' MMMM", {
-            locale,
-          })}`,
+          details:
+            lastTransaction && firstTransaction
+              ? `De ${format(parseISO(firstTransaction.date), "dd 'de' MMMM", {
+                  locale,
+                })} à ${format(parseISO(lastTransaction.date), "dd 'de' MMMM", {
+                  locale,
+                })}`
+              : 'Não há transações',
         };
       });
 
@@ -203,15 +219,25 @@ const Dashboard: React.FC = () => {
               <UserData>
                 <UserImage
                   source={{
-                    uri: 'https://avatars.githubusercontent.com/u/34344370?v=4',
+                    uri: user?.photo
+                      ? user?.photo
+                      : `https://ui-avatars.com/api/?name=${
+                          user?.name
+                        }&background=${theme.colors.secondary.replace(
+                          '#',
+                          '',
+                        )}&color=${theme.colors.shape.replace(
+                          '#',
+                          '',
+                        )}&length=1`,
                   }}
                 />
                 <UserInfo>
                   <UserText>Olá, </UserText>
-                  <UserText bold>Tarcísio</UserText>
+                  <UserText bold>{user?.name}</UserText>
                 </UserInfo>
               </UserData>
-              <LogoutButton onPress={() => console.log('oi')}>
+              <LogoutButton onPress={handleSignOut}>
                 <LogoutIcon />
               </LogoutButton>
             </UserWrapper>

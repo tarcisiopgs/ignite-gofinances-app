@@ -8,6 +8,6 @@ export const Container = styled.View.attrs({})`
 export const Error = styled.Text.attrs({})`
   font-family: ${({theme}) => theme.fonts.regular};
   color: ${({theme}) => theme.colors.attention};
-  font-size: ${RFValue(14)}px;
-  margin: 0 0 ${RFValue(8)}px;
+  font-size: ${RFValue(14, 812)}px;
+  margin: 0 0 ${RFValue(8, 812)}px;
 `;

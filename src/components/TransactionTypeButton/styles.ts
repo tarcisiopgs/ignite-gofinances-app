@@ -20,18 +20,19 @@ interface ContainerProps extends ViewProps {
 }
 
 export const Container = styled.View.attrs({})<ContainerProps>`
-  margin: 0 ${({withoutMarginRight}) => (withoutMarginRight ? 0 : RFValue(8))}px
-    0 0;
+  margin: 0
+    ${({withoutMarginRight}) => (withoutMarginRight ? 0 : RFValue(8, 812))}px 0
+    0;
   border-color: ${({theme, selected}) =>
     selected ? 'transparent' : theme.colors.textLight};
-  border-width: ${RFValue(1.5)}px;
-  border-radius: ${RFValue(5)}px;
+  border-width: ${RFValue(1.5, 812)}px;
+  border-radius: ${RFValue(5, 812)}px;
   flex: 1;
 `;
 
 export const Button = styled(RectButton).attrs({})<ButtonProps>`
-  border-radius: ${RFValue(5)}px;
-  padding: ${RFValue(18)}px 0;
+  border-radius: ${RFValue(5, 812)}px;
+  padding: ${RFValue(18, 812)}px 0;
   justify-content: center;
   flex-direction: row;
 
@@ -53,12 +54,12 @@ export const Button = styled(RectButton).attrs({})<ButtonProps>`
 export const Title = styled.Text.attrs({})`
   font-family: ${({theme}) => theme.fonts.regular};
   color: ${({theme}) => theme.colors.title};
-  margin: 0 0 0 ${RFValue(14)}px;
-  line-height: ${RFValue(21)}px;
-  font-size: ${RFValue(14)}px;
+  margin: 0 0 0 ${RFValue(14, 812)}px;
+  line-height: ${RFValue(21, 812)}px;
+  font-size: ${RFValue(14, 812)}px;
 `;
 
-export const Icon = styled(Feather).attrs({size: RFValue(20)})<IconProps>`
+export const Icon = styled(Feather).attrs({size: RFValue(20, 812)})<IconProps>`
   ${({type}) =>
     type === 'income' &&
     css`

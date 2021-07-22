@@ -9,9 +9,9 @@ interface AmountProps extends TextProps {
 
 export const Container = styled.View.attrs({})`
   background-color: ${({theme}) => theme.colors.shape};
-  padding: ${RFValue(18)}px ${RFValue(24)}px;
-  border-radius: ${RFValue(5)}px;
-  margin: ${RFValue(16)}px 0 0;
+  padding: ${RFValue(18, 812)}px ${RFValue(24, 812)}px;
+  border-radius: ${RFValue(5, 812)}px;
+  margin: ${RFValue(16, 812)}px 0 0;
 `;
 
 export const CategoryWrapper = styled.View.attrs({})`
@@ -23,29 +23,29 @@ export const CategoryWrapper = styled.View.attrs({})`
 export const CategoryName = styled.Text.attrs({})`
   font-family: ${({theme}) => theme.fonts.regular};
   color: ${({theme}) => theme.colors.text};
-  margin: 0 0 0 ${RFValue(17)}px;
-  line-height: ${RFValue(21)}px;
-  font-size: ${RFValue(14)}px;
+  margin: 0 0 0 ${RFValue(17, 812)}px;
+  line-height: ${RFValue(21, 812)}px;
+  font-size: ${RFValue(14, 812)}px;
 `;
 
-export const CategoryIcon = styled(Feather).attrs({size: RFValue(18)})`
+export const CategoryIcon = styled(Feather).attrs({size: RFValue(18, 812)})`
   color: ${({theme}) => theme.colors.text};
 `;
 
 export const DateText = styled.Text.attrs({})`
   font-family: ${({theme}) => theme.fonts.regular};
   color: ${({theme}) => theme.colors.text};
-  line-height: ${RFValue(21)}px;
-  font-size: ${RFValue(14)}px;
+  line-height: ${RFValue(21, 812)}px;
+  font-size: ${RFValue(14, 812)}px;
 `;
 
 export const Amount = styled.Text.attrs({})<AmountProps>`
   font-family: ${({theme}) => theme.fonts.regular};
   color: ${({theme, type}) =>
     type === 'income' ? theme.colors.success : theme.colors.attention};
-  margin: 0 0 ${RFValue(20)}px 0;
-  line-height: ${RFValue(30)}px;
-  font-size: ${RFValue(20)}px;
+  margin: 0 0 ${RFValue(20, 812)}px 0;
+  line-height: ${RFValue(30, 812)}px;
+  font-size: ${RFValue(20, 812)}px;
 `;
 
 export const Footer = styled.View.attrs({})`
@@ -56,7 +56,7 @@ export const Footer = styled.View.attrs({})`
 export const Title = styled.Text.attrs({})`
   font-family: ${({theme}) => theme.fonts.regular};
   color: ${({theme}) => theme.colors.title};
-  line-height: ${RFValue(21)}px;
-  font-size: ${RFValue(14)}px;
-  margin: 0 0 ${RFValue(2)}px;
+  line-height: ${RFValue(21, 812)}px;
+  font-size: ${RFValue(14, 812)}px;
+  margin: 0 0 ${RFValue(2, 812)}px;
 `;

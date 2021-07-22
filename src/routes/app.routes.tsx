@@ -21,8 +21,8 @@ const AppRoutes = () => {
         labelPosition: 'beside-icon',
         labelStyle: {
           fontFamily: theme.fonts.medium,
-          lineHeight: RFValue(21),
-          fontSize: RFValue(14),
+          lineHeight: RFValue(21, 812),
+          fontSize: RFValue(14, 812),
         },
       }}
       initialRouteName="Dashboard">

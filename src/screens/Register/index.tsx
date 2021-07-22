@@ -8,6 +8,7 @@ import uuid from 'react-native-uuid';
 import * as yup from 'yup';
 
 import CategorySelector from '../CategorySelector';
+import {useAuth} from '../../hooks';
 import {
   TransactionTypeButton,
   CategorySelect,
@@ -44,8 +45,6 @@ const schema = yup.object().shape({
   name: yup.string().required('Nome é obrigatório'),
 });
 
-const storageKey = '@gofinances:transactions';
-
 const Register: React.FC = () => {
   const [transactionTypeSelected, setTransactionTypeSelected] = useState<
     'income' | 'outcome' | ''
@@ -64,6 +63,7 @@ const Register: React.FC = () => {
     reset,
   } = useForm({resolver: yupResolver(schema)});
   const navigation = useNavigation();
+  const {user} = useAuth();
 
   const handleRegister = useCallback(
     async (form: FormData) => {
@@ -75,6 +75,7 @@ const Register: React.FC = () => {
         return Alert.alert('Selecione a categoria da transação');
       }
 
+      const storageKey = `@gofinances:transactions_user:${user?.id}`;
       const data = {
         transactionType: transactionTypeSelected,
         category: categorySelected.key,

@@ -10,18 +10,20 @@ import {useTheme} from 'styled-components';
 import locale from 'date-fns/locale/pt-BR';
 import {VictoryPie} from 'victory-native';
 import currency from 'currency.js';
+import lodash from 'lodash';
 import {
-  addMonths,
+  startOfMonth,
   endOfMonth,
-  format,
+  addMonths,
   isBefore,
   parseISO,
-  startOfMonth,
+  isAfter,
+  format,
 } from 'date-fns';
-import lodash from 'lodash';
 
 import {SummaryPill} from '../../components';
 import {categories} from '../../utils';
+import {useAuth} from '../../hooks';
 import {
   LoadingContainer,
   FilterContainer,
@@ -32,9 +34,6 @@ import {
   Header,
   Title,
 } from './styles';
-import {isAfter} from 'date-fns/esm';
-
-const storageKey = '@gofinances:transactions';
 
 const Summary: React.FC = () => {
   const [summaryCategories, setSummaryCategories] = useState<any[]>([]);
@@ -43,6 +42,7 @@ const Summary: React.FC = () => {
   const [filter, setFilter] = useState<Date>(new Date());
   const bottomHeight = useBottomTabBarHeight();
   const theme = useTheme();
+  const {user} = useAuth();
 
   const handleChangeFilter = useCallback(
     (value: number) => {
@@ -53,6 +53,7 @@ const Summary: React.FC = () => {
 
   const loadTransactions = async () => {
     try {
+      const storageKey = `@gofinances:transactions_user:${user?.id}`;
       const loadedData = await AsyncStorage.getItem(storageKey);
       const parsedData = loadedData ? JSON.parse(loadedData) : [];
 
@@ -91,7 +92,7 @@ const Summary: React.FC = () => {
                 <Feather
                   color={theme.colors.textSecondary}
                   name="chevron-left"
-                  size={RFValue(20)}
+                  size={RFValue(20, 812)}
                 />
               </BorderlessButton>
               <FilterText>{format(filter, 'MMMM, yyyy', {locale})}</FilterText>
@@ -99,7 +100,7 @@ const Summary: React.FC = () => {
                 <Feather
                   color={theme.colors.textSecondary}
                   name="chevron-right"
-                  size={RFValue(20)}
+                  size={RFValue(20, 812)}
                 />
               </BorderlessButton>
             </FilterContainer>
@@ -108,13 +109,13 @@ const Summary: React.FC = () => {
                 style={{
                   labels: {
                     fontFamily: theme.fonts.bold,
-                    lineHeight: RFValue(24.98),
+                    lineHeight: RFValue(24.98, 812),
                     fill: theme.colors.shape,
-                    fontSize: RFValue(16.65),
+                    fontSize: RFValue(16.65, 812),
                     fontWeight: 'bold',
                   },
                 }}
-                labelRadius={RFValue(75)}
+                labelRadius={RFValue(75, 812)}
                 colorScale={summaryCategories.map((value) => {
                   const category: any = categories.find(
                     (item) => item.key === value,

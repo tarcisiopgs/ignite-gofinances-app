@@ -30,7 +30,7 @@ export const Container = styled.View.attrs({})`
 
 export const Header = styled.View.attrs({})`
   background-color: ${({theme}) => theme.colors.primary};
-  height: ${RFValue(278)}px;
+  height: ${RFValue(278, 812)}px;
 `;
 
 export const UserData = styled.View.attrs({})`
@@ -38,58 +38,58 @@ export const UserData = styled.View.attrs({})`
 `;
 
 export const UserImage = styled.Image.attrs({})`
-  border-radius: ${RFValue(10)}px;
-  height: ${RFValue(48)}px;
-  width: ${RFValue(48)}px;
+  border-radius: ${RFValue(10, 812)}px;
+  height: ${RFValue(48, 812)}px;
+  width: ${RFValue(48, 812)}px;
 `;
 
 export const UserText = styled.Text.attrs({})<UserTextProps>`
   font-family: ${({theme, bold}) =>
     bold ? theme.fonts.bold : theme.fonts.regular};
   color: ${({theme}) => theme.colors.shape};
-  line-height: ${RFValue(24)}px;
-  font-size: ${RFValue(18)}px;
+  line-height: ${RFValue(24, 812)}px;
+  font-size: ${RFValue(18, 812)}px;
 `;
 
 export const UserInfo = styled.View.attrs({})`
-  margin-left: ${RFValue(17)}px;
+  margin-left: ${RFValue(17, 812)}px;
 `;
 
 export const UserWrapper = styled.View.attrs({})`
-  margin: ${getStatusBarHeight() + RFValue(28)}px 0 0 0;
+  margin: ${getStatusBarHeight() + RFValue(28, 812)}px 0 0 0;
+  padding: 0 ${RFValue(24, 812)}px;
   justify-content: space-between;
-  padding: 0 ${RFValue(24)}px;
   flex-direction: row;
   align-items: center;
 `;
 
 export const HightlightWrapper = styled.ScrollView.attrs({
-  contentContainerStyle: {paddingHorizontal: RFValue(24)},
-  horizontal: true,
+  contentContainerStyle: {paddingHorizontal: RFValue(24, 812)},
   showsHorizontalScrollIndicator: false,
+  horizontal: true,
 })`
-  width: 100%;
+  margin: ${RFValue(124, 812)}px 0 0;
   position: absolute;
-  margin: ${RFValue(124)}px 0 0;
+  width: 100%;
 `;
 
 export const TransactionsWrapper = styled.View.attrs({})`
-  margin: ${RFValue(84)}px 0 0;
-  padding: 0 ${RFValue(24)}px;
+  margin: ${RFValue(84, 812)}px 0 0;
+  padding: 0 ${RFValue(24, 812)}px;
   flex: 1;
 `;
 
 export const TransactionsTitle = styled.Text.attrs({})`
   color: ${({theme}) => theme.colors.textSecondary};
   font-family: ${({theme}) => theme.fonts.regular};
-  line-height: ${RFValue(27)}px;
-  font-size: ${RFValue(18)}px;
+  line-height: ${RFValue(27, 812)}px;
+  font-size: ${RFValue(18, 812)}px;
 `;
 
 export const TransactionsList = styled(
   FlatList as new () => FlatList<TransactionData>,
 ).attrs({
-  contentContainerStyle: {paddingBottom: getBottomSpace() + RFValue(24)},
+  contentContainerStyle: {paddingBottom: getBottomSpace() + RFValue(24, 812)},
   showsVerticalScrollIndicator: false,
 })``;
 
@@ -97,7 +97,7 @@ export const LogoutButton = styled(BorderlessButton).attrs({})``;
 
 export const LogoutIcon = styled(Feather).attrs(({theme}) => ({
   color: theme.colors.secondary,
-  size: RFValue(24),
+  size: RFValue(24, 812),
   name: 'power',
 }))``;
 

@@ -7,7 +7,7 @@ export const Container = styled.View.attrs({})`
 `;
 
 export const Header = styled.View.attrs({})`
-  padding: ${getStatusBarHeight() + RFValue(37)}px 0 ${RFValue(20)}px;
+  padding: ${getStatusBarHeight() + RFValue(37, 812)}px 0 ${RFValue(20, 812)}px;
   background-color: ${({theme}) => theme.colors.primary};
   align-items: center;
 `;
@@ -15,13 +15,13 @@ export const Header = styled.View.attrs({})`
 export const Title = styled.Text.attrs({})`
   font-family: ${({theme}) => theme.fonts.regular};
   color: ${({theme}) => theme.colors.shape};
-  line-height: ${RFValue(27)}px;
-  font-size: ${RFValue(18)}px;
+  line-height: ${RFValue(27, 812)}px;
+  font-size: ${RFValue(18, 812)}px;
 `;
 
 export const Content = styled.ScrollView.attrs({})`
   background-color: ${({theme}) => theme.colors.background};
-  padding: ${RFValue(24)}px;
+  padding: ${RFValue(24, 812)}px;
   flex: 1;
 `;
 
@@ -44,7 +44,7 @@ export const FilterContainer = styled.View.attrs({})`
 export const FilterText = styled.Text.attrs({})`
   color: ${({theme}) => theme.colors.textSecondary};
   font-family: ${({theme}) => theme.fonts.regular};
-  line-height: ${RFValue(30)}px;
-  font-size: ${RFValue(20)}px;
+  line-height: ${RFValue(30, 812)}px;
+  font-size: ${RFValue(20, 812)}px;
   text-transform: capitalize;
 `;
